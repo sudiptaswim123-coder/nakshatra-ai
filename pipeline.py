@@ -1,66 +1,34 @@
-# pipeline.py
-
-def preprocess(tic_id):
-    return {
-        "global_view": [],
-        "local_view": [],
-        "stellar_metadata": {
-            "teff": 5778,
-            "radius": 1.0,
-            "logg": 4.4
-        },
-        "flattened_flux": []
-    }
-
-
-def classify(global_view, local_view, stellar_metadata):
-    return {
-        "class_label": "Transit",
-        "confidence_scores": {
-            "Transit": 0.91,
-            "Eclipse": 0.03,
-            "Blend": 0.04,
-            "Noise": 0.02
-        }
-    }
-
-
-def fit(flattened_flux):
-    return {
-        "period": 4.05,
-        "rp_rs": 0.095,
-        "semi_major_axis": 0.049
-    }
-
+print("PIPELINE LOADED")
+from team_a.preprocessing import preprocess
+from team_b.member_b_classifier import classify
+from team_c.unified_pipeline import run_lightcurve_analysis
 
 def run_pipeline(tic_id):
+    print("RUN PIPELINE CALLED")
 
-    try:
+    # এখন dummy data
+    # পরে Team A এর TESS data fetching এখানে বসবে
 
-        preprocessed = preprocess(tic_id)
+    import numpy as np
 
-        prediction = classify(
-            preprocessed["global_view"],
-            preprocessed["local_view"],
-            preprocessed["stellar_metadata"]
-        )
+    time = np.linspace(0, 30, 500)
+    flux = 1 + np.random.normal(0, 0.002, 500)
 
-        result = {
-            "status": "success",
-            "prediction": prediction
+    result = run_lightcurve_analysis(
+        time=time,
+        flux=flux,
+        star_mass=1.0,
+        star_radius=1.0
+    )
+
+    prediction = result["classification"]
+    candidate = result["candidate"]
+
+    return {
+        "prediction": prediction,
+        "planet": {
+            "period": candidate["period"],
+            "rp_rs": candidate["Rp/R*"],
+            "semi_major_axis": candidate["semi_major_axis"]
         }
-
-        if prediction["class_label"] == "Transit":
-
-            result["planet"] = fit(
-                preprocessed["flattened_flux"]
-            )
-
-        return result
-
-    except Exception as e:
-
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+    }

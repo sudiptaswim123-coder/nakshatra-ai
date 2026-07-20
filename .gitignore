@@ -1,0 +1,60 @@
+# Python caches and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and local configuration
+.venv/
+.venv311/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+
+# Packaging and build outputs
+build/
+dist/
+*.egg-info/
+
+# Generated project outputs
+models/
+member_a_output_sample/
+eval_artifacts/
+real_training/
+real_training_retry/
+*.pt
+*.pth
+*.onnx
+*.npz
+*.npy
+*.zip
+member_a_*_plots.png
+member_a_*_views.png
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# Notebook and local analysis artifacts
+.ipynb_checkpoints/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
