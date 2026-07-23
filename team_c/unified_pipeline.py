@@ -10,9 +10,14 @@ from typing import Any
 
 import numpy as np
 
-from .classifier import classify
-from .preprocessing import detrend, make_global_view, make_local_view, sigma_clip_outliers
+from team_b.member_b_classifier import classify
 
+from team_a.preprocessing import (
+    detrend,
+    make_global_view,
+    make_local_view,
+    sigma_clip_outliers,
+)
 
 def _synthetic_star(period: float = 4.05, t0: float = 2.0, depth: float = 0.009025,
                     duration_hours: float = 3.2, variability_amp: float = 0.0008,

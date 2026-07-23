@@ -1,306 +1,302 @@
-import numpy as np
-from pipeline import run_pipeline
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import numpy as np
+import plotly.graph_objects as go
+from datetime import datetime
+
+from pipeline import run_pipeline
+
+
+# ==========================
+# PAGE CONFIG
+# ==========================
+
 st.set_page_config(
-    page_title="Nakshatra AI",
-    page_icon="🚀",
+    page_title="NAKSHATRA AI",
+    page_icon="🛰️",
     layout="wide"
 )
+#=======================
+#login system
+#========================
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+
+    st.markdown("""
+    <style>
+
+    .stApp{
+
+        background-image:
+        linear-gradient(
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0.8)
+        ),
+        url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa");
+
+        background-size:cover;
+        background-position:center;
+        background-attachment:fixed;
+    }
+
+    </style>
+    """, unsafe_allow_html=True)
+    
+    
+    
+
+    col1,col2,col3 = st.columns([1,2,1])
+
+    with col2:
+
+        username = st.text_input("Username")
+        password = st.text_input(
+            "Access Key",
+            type="password"
+        )
+
+        if st.button(
+            "LOGIN",
+            use_container_width=True
+        ):
+
+            if username == "isro" and password == "naksatra2026":
+
+                st.session_state.logged_in = True
+                st.rerun()
+
+            else:
+                st.error("Access Denied")
+
+    st.stop()
+
+# ==========================
+# CSS
+# ==========================
 st.markdown("""
 <style>
-
-/* Main Background */
 .stApp{
-background-image:url(
-"https://images.unsplash.com/photo-1462331940025-496dfbfc7564"
-);
-background-size:cover;
-background-attachment:fixed;
-}
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,.45),
+            rgba(0,0,0,.75)
+        ),
+        url("https://images.unsplash.com/photo-1769251971680-005dfa536f07?q=80&w=1032&auto=format&fit=crop");
 
-/* Sidebar */
-[data-testid="stSidebar"] {
-    background: linear-gradient(
-        180deg,
-        #0B1026,
-        #111827
-    );
-    border-right: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Glass Cards */
-div[data-testid="stMetric"] {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,0.15);
-
-    box-shadow:
-        0 8px 32px rgba(0,0,0,0.4),
-        0 0 20px rgba(0,255,255,0.15);
-
-    transition: 0.3s;
-}
-
-div[data-testid="stMetric"]:hover {
-    transform: translateY(-5px);
-}
-
-/* Buttons */
-.stButton > button {
-
-    background: linear-gradient(
-        90deg,
-        #06B6D4,
-        #3B82F6
-    );
-
-    color: white;
-
-    border: none;
-
-    border-radius: 15px;
-
-    height: 55px;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 0 15px rgba(59,130,246,0.5);
-
-}
-
-/* Titles */
-h1 {
-    color: white;
-    text-align: center;
-    font-size: 3rem;
-}
-
-h2,h3 {
-    color: #7DD3FC;
-}
-
-/* Info Boxes */
-[data-testid="stAlert"] {
-
-    border-radius: 15px;
-
-    border: 1px solid rgba(255,255,255,0.1);
-
-    box-shadow:
-        0 0 15px rgba(0,255,255,0.08);
-}
-
-/* Input Box */
-
-.stTextInput input {
-
-    border-radius: 12px;
-
-    background-color: rgba(255,255,255,0.08);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 
     color: white;
 }
+.glass{
+backdrop-filter: blur(18px);
+background: rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.12);
+border-radius:24px;
+padding:25px;
+}
+.hero-box{
+backdrop-filter: blur(20px);
+background: rgba(0,0,0,0.25);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:25px;
+padding:30px;
+margin-bottom:20px;
+}
 
-/* Plotly Container */
+.hero-title{
+font-size:72px;
+font-weight:900;
+text-align:center;
+letter-spacing:2px;
+color:white;
+text-shadow:0 0 30px #60a5fa;
+margin-top:20px;
+}
 
-[data-testid="stPlotlyChart"] {
-
-    background: rgba(255,255,255,0.05);
-
-    border-radius: 20px;
-
-    padding: 10px;
-
-    box-shadow:
-        0 0 20px rgba(0,255,255,0.08);
+.hero-subtitle{
+text-align:center;
+font-size:22px;
+color:#93c5fd;
+margin-bottom:30px;
 }
 
 </style>
 """, unsafe_allow_html=True)
-# ===== Sidebar =====
+# ==========================
+# ISRO HEADER
+# ==========================
 
-st.sidebar.title("🚀 Nakshatra AI")
-st.sidebar.markdown("---")
+col1, col2 = st.columns([1,5])
 
-st.sidebar.success("🟢 System Online")
+with col1:
+    try:
+        st.image(
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
+            use_container_width=True
+        )
+    except:
+        pass
 
-st.sidebar.metric(
-    "Models Loaded",
-    "3"
-)
+with col2:
+    st.markdown("""
+    <div class="hero-box">
+    <div class="hero-title">
+    🚀 NAKSHATRA AI
+    </div>
 
-st.sidebar.metric(
-    "Pipeline Status",
-    "Ready"
-)
-
-# ===== Main Header =====
-st.markdown("""
-<h1 style="
-text-align:center;
-color:white;
-font-size:70px;
-text-shadow:
-0 0 20px cyan,
-0 0 40px cyan,
-0 0 60px blue;
-">
-🚀 NAKSHATRA AI
-</h1>
-""", unsafe_allow_html=True)
-# ===== Hero Card =====
-st.markdown("""
-<div style="
-padding:30px;
-border-radius:25px;
-background:linear-gradient(
-135deg,
-rgba(0,255,255,0.15),
-rgba(59,130,246,0.15)
-);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,0.1);
-box-shadow:0 0 40px rgba(0,255,255,0.2);
-text-align:center;
-">
-
-<h2>🛰️ Mission Nakshatra</h2>
-
-<h4>
-AI-Based Exoplanet Discovery Platform
-</h4>
-
-<p>
-Analyzing TESS stellar observations and detecting planetary transit signatures using machine learning.
-</p>
-
-</div>
-""", unsafe_allow_html=True)
-# ===== TIC Input =====
-st.markdown("### 🚀 Mission Overview")
-
-c1, c2, c3, c4 = st.columns(4)
-
-c1.metric("Stars Analyzed", "12,540")
-c2.metric("Candidates", "322")
-c3.metric("Confirmed", "57")
-c4.metric("AI Accuracy", "98.2%")
-tic_id = st.text_input("Enter TIC ID")
-
-if st.button("Analyze"):
-
-    if not tic_id.strip():
-        st.error("Please enter a TIC ID")
-        st.stop()
-
-    result = run_pipeline(tic_id)
-
-    prediction = result["prediction"]
-
-    st.success(f"Analysis completed for TIC {tic_id}")
-
-    st.markdown(f"""
-    <div style="
-    padding:20px;
-    border-radius:20px;
-    background:rgba(0,255,150,0.1);
-    border:1px solid rgba(0,255,150,0.4);
-    box-shadow:0 0 25px rgba(0,255,150,0.2);
-    ">
-
-    <h3>🛰️ Detection Status</h3>
-
-    <h2>{prediction['class_label']}</h2>
+    <div class="hero-subtitle">
+    ISRO BAH 2026 • Autonomous Exoplanet Detection System
+    </div>
 
     </div>
     """, unsafe_allow_html=True)
 
-    
-    
-    
+#===================
+#sidebar
+#=====================
+with st.sidebar:
 
-    # ===== Light Curve Analysis =====
+    try:
+        st.image(
+            "assets/logo.png",
+            width=140
+        )
+    except:
+        pass
+
+    st.markdown("## 🚀 Mission Control")
+
+    st.success("TESS Connected")
+    st.success("AI Model Online")
+    st.success("Pipeline Active")
+
     st.divider()
-    st.markdown("## 📈 Light Curve Analysis")
 
-    col_curve1, col_curve2 = st.columns(2)
+    st.metric("Version","1.0")
+    st.metric("Mission","ISRO BAH 2026")
 
-    x = np.linspace(0, 30, 500)
+    st.divider()
 
-    raw_flux = 1 + np.random.normal(0, 0.002, 500)
+    st.markdown("""
+    ### NAKSHATRA AI
 
-    transit_mask = (x > 14) & (x < 16)
-    raw_flux[transit_mask] -= 0.01
+    Autonomous Exoplanet Detection System
 
-    detrended_flux = raw_flux - np.mean(raw_flux) + 1
+    Team A • Team B • Team C
+    """)
+# ==========================
+# MISSION STATUS
+# ==========================
+c1,c2,c3,c4 = st.columns(4)
 
-    with col_curve1:
+with c1:
+    st.metric("TESS","CONNECTED")
 
-        raw_df = pd.DataFrame({
-            "Time": x,
-            "Flux": raw_flux
-        })
+with c2:
+    st.metric("MODEL","ONLINE")
 
-        fig_raw = px.line(
-            raw_df,
-            x="Time",
-            y="Flux",
-            title="Raw Light Curve"
+with c3:
+    st.metric("PIPELINE","ACTIVE")
+
+with c4:
+    st.metric(
+        "UTC",
+        datetime.utcnow().strftime("%H:%M:%S")
+    )
+
+st.divider()
+
+
+# ==========================
+# TIC INPUT
+# ==========================
+
+st.subheader("🎯 Target Star Analysis")
+
+tic_id = st.text_input(
+    "Enter TIC ID",
+    placeholder="TIC 123456789"
+)
+
+analyze = st.button(
+    "🚀 ANALYZE TARGET",
+    use_container_width=True
+)
+
+
+# ==========================
+# ANALYSIS
+# ==========================
+
+if analyze:
+
+    if not tic_id:
+
+        st.warning("Please enter a TIC ID")
+
+    else:
+
+        with st.spinner("Running AI Pipeline..."):
+
+            result = run_pipeline(tic_id)
+
+        prediction = result["prediction"]
+
+        planet = result["planet"]
+
+        label = prediction["class_label"]
+
+        scores = prediction["confidence_scores"]
+
+        confidence = max(scores.values()) * 100
+
+        st.success(
+            f"Analysis Complete : {tic_id}"
         )
+        st.subheader("🎯 Observation Summary")
 
-        st.plotly_chart(
-            fig_raw,
-            use_container_width=True
-        )
+        col1,col2,col3 = st.columns(3)
 
-    with col_curve2:
+        with col1:
+            st.metric("Target", f"TIC {tic_id}")
 
-        detrended_df = pd.DataFrame({
-            "Time": x,
-            "Flux": detrended_flux
-        })
+        with col2:
+            st.metric("Classification", label.upper())
 
-        fig_det = px.line(
-            detrended_df,
-            x="Time",
-            y="Flux",
-            title="Detrended Light Curve"
-        )
-
-        st.plotly_chart(
-            fig_det,
-            use_container_width=True
-        )
-
-    # ===== Prediction + Planet Parameters =====
-    col1, col2 = st.columns(2)
-
-    with col1:
+        with col3:
+            st.metric("Confidence", f"{confidence:.2f}%")
 
         st.divider()
-        st.markdown("### Prediction Result")
 
-        prediction_df = pd.DataFrame({
-            "Class": list(
-                prediction["confidence_scores"].keys()
-            ),
-            "Confidence": list(
-                prediction["confidence_scores"].values()
+        # ======================
+        # LIGHT CURVE
+        # ======================
+
+        st.subheader("📈 Light Curve")
+
+        x = result["time"]
+        y = result["flux"]
+       
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(
+                x=x,
+                y=y,
+                mode="lines",
+                name=" TESS Flux"
             )
-        })
+        )
 
-        fig = px.bar(
-            prediction_df,
-            x="Class",
-            y="Confidence",
-            title="Classification Confidence"
+        fig.update_layout(
+            template="plotly_dark",
+            
+            title=f"TIC{tic_id}  Real TESS Light Curve",
+            height=500
         )
 
         st.plotly_chart(
@@ -308,116 +304,175 @@ if st.button("Analyze"):
             use_container_width=True
         )
 
-        fig_pie = px.pie(
-            prediction_df,
-            names="Class",
-            values="Confidence",
-            title="Confidence Distribution"
-        )
+        st.divider()
 
-        st.plotly_chart(
-            fig_pie,
-            use_container_width=True
-        )
+        # ======================
+        # AI RESULT
+        # ======================
 
-    with col2:
+        st.subheader("🤖 AI Classification")
+
+        c1, c2 = st.columns([1,1])
+
+        with c1:
+
+            st.success(
+                f"Detected Class : {label.upper()}"
+            )
+
+            st.progress(
+                confidence / 100
+            )
+
+            st.write(
+                f"Confidence : {confidence:.2f}%"
+            )
+
+        with c2:
+
+            prob_df = pd.DataFrame(
+                {
+                    "Class": list(scores.keys()),
+                    "Probability (%)":
+                    [
+                        round(v * 100, 2)
+                        for v in scores.values()
+                    ]
+                }
+            )
+
+            st.dataframe(
+                prob_df,
+                use_container_width=True
+            )
+        # ======================
+        # STELLAR PARAMETERS
+        # ======================
+
+        st.subheader("⭐ Host Star Parameters")
+
+        metadata = result["metadata"]
+
+        c1, c2, c3, c4 = st.columns(4)
+
+        with c1:
+            st.metric(
+                "Teff",
+                f"{metadata[0]:.0f} K"
+            )
+
+        with c2:
+            st.metric(
+                "Radius",
+                f"{metadata[1]:.2f} Rsun"
+            )
+
+        with c3:
+            st.metric(
+                "log(g)",
+                f"{metadata[2]:.2f}"
+            )
+
+        with c4:
+            st.metric(
+                "Mass",
+                f"{metadata[3]:.2f} Msun"
+            )
 
         st.divider()
-        st.markdown("### 🪐 Detected Planet Properties")
 
-        if "planet" in result:
+        # ======================
+        # PLANET PROFILE
+        # ======================
 
-            planet = result["planet"]
+        st.subheader("🪐 Candidate Planet Profile")
 
-            metric1, metric2, metric3 = st.columns(3)
+        c1, c2, c3 = st.columns(3)
 
-            metric1.metric(
-                "Period",
+        with c1:
+
+            st.metric(
+                "Orbital Period",
                 f"{planet['period']} Days"
             )
 
-            metric2.metric(
+        with c2:
+
+            st.metric(
                 "Rp/R*",
                 f"{planet['rp_rs']}"
             )
 
-            metric3.metric(
+        with c3:
+
+            st.metric(
                 "Semi Major Axis",
                 f"{planet['semi_major_axis']} AU"
             )
-        else:
 
-            st.warning(
-                "No planetary parameters available"
+        st.divider()
+
+        # ======================
+        # CONFIDENCE CHART
+        # ======================
+        fig2 = go.Figure()
+
+        fig2.add_trace(
+            go.Bar(
+                x=list(scores.keys()),
+                y=[v*100 for v in scores.values()]
             )
+        )
 
-    # ===== Download Report =====
+        fig2.update_layout(
+            template="plotly_dark",
+            title="AI Confidence Distribution",
+            height=450
+        )
 
-    st.divider()
-    st.markdown("## 📄 Analysis Report")
-
-    report_text = f"""
-    Nakshatra AI Analysis Report
-
-    TIC ID: {tic_id}
-
-    Detected Class: {prediction['class_label']}
-
-    Confidence Scores:
-    {prediction['confidence_scores']}
-    """
-
-    if "planet" in result:
-
-        report_text += f"""
-
-    Planet Parameters:
-
-    Period: {planet['period']} Days
-    Rp/R*: {planet['rp_rs']}
-    Semi Major Axis: {planet['semi_major_axis']} AU
-    """
-
-    st.download_button(
-        label="📄 Download Report",
-        data=report_text,
-        file_name=f"TIC_{tic_id}_report.txt",
-        mime="text/plain"
-    )
-    st.markdown("---")
-
-st.markdown("""
-<div style='text-align:center'>
-🚀 Nakshatra AI v1.0
-Developed for AI-Based Exoplanet Detection Challenge
-Inspired by ISRO • TESS • NASA Missions
-</div>
-""", unsafe_allow_html=True)
-    
-
-        
-        
-        
-        
-    
-    
-    
+        st.plotly_chart(
+            fig2,
+            use_container_width=True
+        )
 
 
+        st.divider()
+
+        # ======================
+        # MISSION LOGS
+        # ======================
+
+        st.subheader("📡 Mission Logs")
+
+        logs = f"""
+[{datetime.now().strftime('%H:%M:%S')}] Pipeline Started
+
+[{datetime.now().strftime('%H:%M:%S')}] TIC Loaded
+
+[{datetime.now().strftime('%H:%M:%S')}] Team A Preprocessing Complete
+
+[{datetime.now().strftime('%H:%M:%S')}] Member B Model Loaded
+
+[{datetime.now().strftime('%H:%M:%S')}] Prediction : {label}
+
+[{datetime.now().strftime('%H:%M:%S')}] Candidate Report Generated
+"""
+
+        st.code(logs)
+
+        st.download_button(
+            "📄 Download Mission Report",
+            logs,
+            file_name=f"{tic_id}_report.txt"
+        )
 
 
+# ==========================
+# FOOTER
+# ==========================
 
+st.divider()
 
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
+st.caption(
+    "NAKSHATRA AI • ISRO BAH 2026 Challenge • Exoplanet Detection Mission"
+)

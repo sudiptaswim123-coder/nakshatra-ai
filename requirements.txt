@@ -1,4 +1,9 @@
 streamlit
 plotly
-pandas
+lightkurve
+astroquery
+astropy
+torch
 numpy
+pandas
+scikit-learn
